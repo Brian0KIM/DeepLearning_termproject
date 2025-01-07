@@ -11,7 +11,7 @@ import torchvision.transforms as transforms
 import os
 import argparse
 
-from models import *
+from models import ResNet20
 from utils import progress_bar
 
 
@@ -54,24 +54,9 @@ classes = ('plane', 'car', 'bird', 'cat', 'deer',
 
 # Model
 print('==> Building model..')
-# net = VGG('VGG19')
-# net = ResNet18()
-# net = PreActResNet18()
-# net = GoogLeNet()
-# net = DenseNet121()
-# net = ResNeXt29_2x64d()
-# net = MobileNet()
-# net = MobileNetV2()
-# net = DPN92()
-# net = ShuffleNetG2()
-# net = SENet18()
-# net = ShuffleNetV2(1)
-# net = EfficientNetB0()
-# net = RegNetX_200MF()
-#net = SimpleDLA()
 net=ResNet20()
 net = net.to(device)
-total_params = sum(p.numel() for p in net.parameters() if p.requires_grad)
+total_params = sum(p.numel() for p in net.parameters() if p.requires_grad)#counting total number of parameters
 print(f'Total number of parameters: {total_params}')
 if device == 'cuda':
     net = torch.nn.DataParallel(net)
@@ -88,7 +73,7 @@ if args.resume:
 
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(net.parameters(), lr=args.lr,
-                      momentum=0.9, weight_decay=5e-4)
+                      momentum=0.9, weight_decay=1e-4)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
 
 
